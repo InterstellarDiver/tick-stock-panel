@@ -8,7 +8,6 @@ import { api, type HoldingsState } from '@/lib/api'
 
 vi.mock('@/lib/api', () => ({ api: {holdings: vi.fn(), holdingTrade: vi.fn(), holdingChips: vi.fn(), holdingsRestore: vi.fn(), instrumentSearch: vi.fn(), klineDaily: vi.fn()} }))
 vi.mock('@/extensions/stockPreview', () => ({openStockPreview: vi.fn()}))
-vi.mock('@/components/PageHeader', () => ({PageHeader: ({title}: {title: string}) => <h1>{title}</h1>}))
 let root: Root
 let host: HTMLDivElement
 let qc: QueryClient
@@ -51,4 +50,15 @@ it('keeps save errors visible and does not close form', async () => {
   await render(); await click('详情'); await click('修改')
   await act(async () => document.querySelector('form')!.dispatchEvent(new Event('submit', {bubbles: true, cancelable: true})))
   await flush(); expect(document.querySelector('form')?.textContent).toContain('卖出超过当时持仓')
+})
+
+it('places actions in the shared header and status filters below it', async () => {
+  await render()
+  const header = host.querySelector('header')!
+  expect(header.textContent).toContain('持仓管理')
+  for (const label of ['录入交易', '刷新', '导出账本', '恢复账本']) expect(header.textContent).toContain(label)
+  expect(header.textContent).not.toContain('当前持仓（1）')
+  expect(host.querySelector('[aria-label="持仓状态"]')?.textContent).toContain('当前持仓（1）')
+  await click('录入交易')
+  expect(document.querySelector('form')).not.toBeNull()
 })

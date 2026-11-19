@@ -1,0 +1,95 @@
+/* Keep a single set of trade controls and the same table semantics at both sizes. */
+@media (max-width: 767px) {
+  .holdings-page .holdings-table,
+  .holdings-page .holdings-transactions {
+    display: block;
+    white-space: normal;
+  }
+
+  .holdings-page :is(.holdings-table, .holdings-transactions) thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .holdings-page :is(.holdings-table, .holdings-transactions) tbody {
+    display: grid;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .holdings-page :is(.holdings-table, .holdings-transactions) tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+    padding: 16px;
+    border: 1px solid hsl(var(--border));
+    border-radius: 8px;
+    background: hsl(var(--surface));
+  }
+
+  .holdings-page :is(.holdings-table, .holdings-transactions) td {
+    display: block;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .holdings-page :is(.holdings-table, .holdings-transactions) td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: hsl(var(--fg-muted));
+    font-size: 11px;
+  }
+
+  .holdings-page .holdings-table td:first-child,
+  .holdings-page .holdings-transactions td:nth-last-child(2),
+  .holdings-page .holding-actions {
+    grid-column: 1 / -1;
+  }
+
+  .holdings-page .holdings-table td:first-child button {
+    min-height: 44px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .holdings-page .holding-actions {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .holdings-page .holding-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .holdings-header {
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+
+  .holdings-toolbar {
+    flex-basis: 100%;
+    margin-left: -44px;
+  }
+
+  .holdings-toolbar > button,
+  .holdings-toolbar > label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+  }
+}
