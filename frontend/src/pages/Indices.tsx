@@ -173,8 +173,8 @@ export function Indices() {
   }
 
   return (
-    <div className="h-full overflow-auto bg-base p-4">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="h-full min-w-0 overflow-auto bg-base p-3 md:p-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 max-md:pl-11">
         <div>
           <h1 className="text-lg font-semibold text-foreground">指数</h1>
           <p className="mt-1 text-xs text-muted">
@@ -185,7 +185,7 @@ export function Indices() {
           <button
             onClick={() => syncDaily.mutate()}
             disabled={syncDaily.isPending}
-            className="inline-flex items-center gap-1.5 rounded-btn bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+            className="inline-flex items-center whitespace-nowrap gap-1.5 rounded-btn bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent/90 disabled:opacity-50"
           >
             {syncDaily.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
             同步指数日K
@@ -193,18 +193,18 @@ export function Indices() {
         </div>
       </div>
 
-      <div className="grid grid-cols-[15rem_1fr] gap-4">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-4">
         <aside className="rounded-card border border-border bg-surface p-3">
           <div className="mb-2 px-1 text-[11px] uppercase tracking-wider text-muted">核心指数</div>
-          <div className="space-y-1">
+          <div className="grid grid-cols-2 gap-1 lg:grid-cols-1">
             {topRows.map(renderIndexItem)}
           </div>
         </aside>
 
         <main className="min-w-0 rounded-card border border-border bg-surface p-3">
-          <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Activity className="h-4 w-4 text-accent" />
                 <h2 className="truncate text-sm font-semibold text-foreground">
                   {selectedInfo?.name || selectedSymbol || '未选择指数'}
@@ -217,19 +217,19 @@ export function Indices() {
                 实时缓存 {quotes.data?.count ?? 0} 只指数 · 日K来源 {daily.data?.source ?? '--'}
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs">
+            <div className="grid max-w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 text-xs max-md:w-full">
               <input
                 type="date"
                 value={range.start}
                 onChange={e => setRange(r => ({ ...r, start: e.target.value }))}
-                className="rounded-btn border border-border bg-base px-2 py-1 text-secondary outline-none focus:border-accent"
+                className="min-w-0 rounded-btn border border-border bg-base px-2 py-1 text-secondary outline-none focus:border-accent"
               />
               <span className="text-muted">至</span>
               <input
                 type="date"
                 value={range.end}
                 onChange={e => setRange(r => ({ ...r, end: e.target.value }))}
-                className="rounded-btn border border-border bg-base px-2 py-1 text-secondary outline-none focus:border-accent"
+                className="min-w-0 rounded-btn border border-border bg-base px-2 py-1 text-secondary outline-none focus:border-accent"
               />
             </div>
           </div>
@@ -242,7 +242,7 @@ export function Indices() {
             </div>
           )}
           {chartRows.length > 0 && (
-            <div className="flex items-start gap-3">
+            <div className="grid grid-cols-1 items-start gap-3 xl:grid-cols-2">
               <div className="min-w-0 flex-1">
                 <LightweightDaily
                   data={chartRows}
@@ -259,9 +259,9 @@ export function Indices() {
                   activeIndicators={['vol', 'macd']}
                 />
               </div>
-              <div className="min-w-0 flex-1 border-l border-border pl-3" style={{ height: 620 }}>
+              <div className="min-w-0 border-t border-border pt-3 xl:h-[620px] xl:border-l xl:border-t-0 xl:pl-3 xl:pt-0">
                 {!hasMinuteCap ? (
-                  <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+                  <div className="flex h-full flex-col items-center justify-center gap-2 py-6 text-center">
                     <Lock className="h-5 w-5 text-muted" />
                     <div className="text-xs text-secondary">指数分时数据不可用</div>
                     <div className="text-[10px] text-muted">分钟K(批量)数据不可用</div>

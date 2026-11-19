@@ -269,14 +269,14 @@ export function Dashboard() {
             {data.emotion.label} · {score}
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[11px] text-muted">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 whitespace-nowrap text-[11px] text-muted md:gap-3">
           {currentDate ? (
             <DatePicker
               value={currentDate}
               onChange={setSelectedDate}
               min={dataStatus.data?.enriched?.earliest_date ?? undefined}
               max={latestDate ?? undefined}
-              className="w-32"
+              className="w-28 shrink-0 md:w-32"
             />
           ) : (
             <span className="font-mono text-secondary">—</span>

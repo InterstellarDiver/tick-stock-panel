@@ -4,8 +4,8 @@ import { api, type HoldingTrade } from '@/lib/api'
 import { QK } from '@/lib/queryKeys'
 import { StockFinancialSearch } from '@/components/financials/StockFinancialSearch'
 
-const input = 'w-full rounded border border-border bg-base px-3 py-2 text-sm'
-const button = 'rounded border border-border px-3 py-2 text-xs hover:bg-elevated disabled:opacity-40'
+const input = 'min-w-0 min-h-11 w-full rounded border border-border bg-base px-3 py-2 text-[16px] leading-6 md:text-sm'
+const button = 'min-h-11 md:min-h-0 rounded border border-border px-3 py-2 text-xs hover:bg-elevated disabled:opacity-40'
 
 export function TradeForm({ initial, existing, pending, error, onSave, onCancel }: {
   initial: HoldingTrade
@@ -48,7 +48,7 @@ export function TradeForm({ initial, existing, pending, error, onSave, onCancel 
     setTrade(t => ({ ...t, ...patch, price: '' }))
   }
 
-  return <form className="p-5 space-y-4 max-h-[85vh] overflow-auto" onSubmit={e => {
+  return <form className="p-4 md:p-5 space-y-4 max-h-[calc(100dvh-2rem)] md:max-h-[85dvh] overflow-auto [&_input]:max-w-full [&_input]:text-[16px] md:[&_input]:text-sm" onSubmit={e => {
     e.preventDefault()
     if (!trade.symbol || !date || !trade.price || trade.qty <= 0) return
     onSave({ ...trade, traded_at: `${date}T00:00:00` })
@@ -66,25 +66,25 @@ export function TradeForm({ initial, existing, pending, error, onSave, onCancel 
     <label className="block text-xs">成交日期<input className={input} required type="date" max={today} value={date}
       onChange={e => changeContext({ traded_at: e.target.value })} /></label>
     <fieldset className="space-y-2"><legend className="text-xs">方向</legend>
-      <div className="flex gap-6">{(['buy', 'sell'] as const).map(side => <label key={side} className="flex items-center gap-2 text-sm">
+      <div className="flex gap-6 min-h-11 items-center">{(['buy', 'sell'] as const).map(side => <label key={side} className="flex items-center gap-2 text-sm">
         <input type="radio" name="trade-side" value={side} checked={trade.side === side}
           onChange={() => setTrade({ ...trade, side })} />{side === 'buy' ? '买入' : '卖出'}
       </label>)}</div>
     </fieldset>
-    <label className="block text-xs">数量（股）<input className={input} required type="number" min="0" step="100" value={trade.qty}
+    <label className="block text-xs">数量（股）<input className={input} inputMode="decimal" required type="number" min="0" step="100" value={trade.qty}
       onChange={e => setTrade({ ...trade, qty: Number(e.target.value) })} /></label>
-    <label className="block text-xs">成交价格<input className={input} required type="number" min="0.000001" step="0.000001" value={trade.price}
+    <label className="block text-xs">成交价格<input className={input} inputMode="decimal" required type="number" min="0.000001" step="0.000001" value={trade.price}
       onChange={e => { priceEdited.current = true; setTrade({ ...trade, price: e.target.value }) }} /></label>
     {autoPrice && !!trade.symbol && !!date && <p className="text-xs text-muted" aria-live="polite">
       {beforeClose ? '当日尚未收盘，请手动填写实际成交价格。' : close.isFetching ? '正在读取当日收盘价…' : close.isError ? '收盘价读取失败，请手动填写实际成交价格。' : validPrice ? '已读取当日不复权收盘价，可手动修改为实际成交价格。' : '所选日期无可用收盘价，请手动填写（休市、停牌或本地数据缺失）。'}
     </p>}
-    <label className="block text-xs">总费用（元）<input className={input} required type="number" min="0" step="0.000001" value={trade.fee}
+    <label className="block text-xs">总费用（元）<input className={input} inputMode="decimal" required type="number" min="0" step="0.000001" value={trade.fee}
       onChange={e => setTrade({ ...trade, fee: e.target.value })} /></label>
     <label className="block text-xs">备注<input className={input} maxLength={1000} value={trade.note}
       onChange={e => setTrade({ ...trade, note: e.target.value })} /></label>
     <div className="flex flex-wrap gap-2" aria-label="快捷备注">{['定投', '抄底', '止损', '止盈'].map(note => <button key={note} type="button" className={button}
       onClick={() => setTrade(t => ({ ...t, note: t.note.includes(note) ? t.note : [t.note.trim(), note].filter(Boolean).join('，').slice(0, 1000) }))}>{note}</button>)}</div>
-    <div className="flex gap-2"><button className={button} disabled={pending || !trade.symbol || !trade.price || trade.qty <= 0}>{pending ? '保存中…' : '保存成交'}</button>
+    <div className="grid grid-cols-2 gap-2 md:flex"><button className={button} disabled={pending || !trade.symbol || !trade.price || trade.qty <= 0}>{pending ? '保存中…' : '保存成交'}</button>
       <button type="button" className={button} disabled={pending} onClick={onCancel}>取消</button></div>
   </form>
 }

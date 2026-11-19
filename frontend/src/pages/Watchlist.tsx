@@ -328,7 +328,7 @@ function StockSearchBox({
   }
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative max-md:flex-1 max-md:min-w-36">
       <div className="relative flex items-center">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted pointer-events-none" />
         <input
@@ -339,7 +339,7 @@ function StockSearchBox({
           onChange={(e) => { setQuery(e.target.value); setOpen(true); setActiveIdx(-1) }}
           onFocus={() => { if (query.trim()) setOpen(true) }}
           onKeyDown={handleKeyDown}
-          className="w-44 h-8 pl-8 pr-2.5 rounded-btn bg-elevated border border-border text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:w-56 transition-all duration-200"
+          className="w-44 h-8 pl-8 pr-2.5 rounded-btn bg-elevated border border-border text-xs text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 md:focus:w-56 max-md:w-full transition-all duration-200"
         />
       </div>
 
@@ -350,7 +350,7 @@ function StockSearchBox({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full mt-1 z-50 w-72 max-h-[320px] overflow-y-auto rounded-card border border-border bg-base shadow-xl"
+            className="absolute right-0 top-full mt-1 z-50 w-72 max-md:max-w-full max-h-[320px] overflow-y-auto rounded-card border border-border bg-base shadow-xl"
           >
             {results.map((r, i) => {
               const entryGids = existingBySymbol.get(r.symbol)
@@ -1346,6 +1346,16 @@ export function Watchlist() {
   )
 
   const cardColumns = useCardColumnCount()
+  const compactTable = cardColumns < 4
+  const tableColumns = useMemo(() => {
+    if (!compactTable) return visibleColumns
+    const priority = ['symbol', 'price', 'pct']
+    const rank = (column: typeof visibleColumns[number]) => {
+      const index = column.source.type === 'builtin' ? priority.indexOf(column.source.key) : -1
+      return index < 0 ? priority.length : index
+    }
+    return [...visibleColumns].sort((a, b) => rank(a) - rank(b))
+  }, [compactTable, visibleColumns])
   const cardGridRef = useRef<HTMLDivElement>(null)
   const virtualized = sortedRows.length > VIRTUAL_LIST_THRESHOLD
   const virtualizeCards = viewMode === 'card' && !groupCardsOpen && virtualized
@@ -1434,8 +1444,8 @@ export function Watchlist() {
   )
 
   return (
-    <div className="flex flex-col h-full">
-      <PageHeader
+    <div className="flex min-w-0 max-w-full flex-col h-full">
+      <PageHeader className="max-md:flex-col max-md:items-stretch max-md:gap-2 max-md:px-3 max-md:[&>div:first-child]:pl-11"
         title="自选"
         titleExtra={
           <span className="inline-flex items-center gap-1.5">
@@ -1473,7 +1483,7 @@ export function Watchlist() {
           </span>
         }
         right={
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             {/* 筛选 / 重置 / 搜索 */}
             <button
               onClick={() => setFilterOpen(v => !v)}
@@ -1712,7 +1722,7 @@ export function Watchlist() {
 
       {/* 可滚动列表区 — 占满剩余高度，内部独立滚动，表头 sticky 固定 */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="px-5 py-3">
+        <div className="min-w-0 px-2 py-3 md:px-5">
           {/* 列表 */}
           {watchlistContentLoading ? (
             <div className="text-sm text-muted">加载中…</div>
@@ -1745,7 +1755,8 @@ export function Watchlist() {
             />
           ) : viewMode === 'table' ? (
             <StockDataTable
-              columns={visibleColumns}
+              columns={tableColumns}
+              minWidth={compactTable ? 0 : undefined}
               rows={sortedRows}
               headerSticky
               sort={sort}
@@ -1846,11 +1857,11 @@ export function Watchlist() {
                   const board = boardTag(r.symbol)
                   return (
                     <td className="px-1.5 py-1.5">
-                      <div className="flex items-center gap-1 w-full">
+                      <div className="flex items-center gap-1 w-full max-md:w-32 max-md:flex-wrap">
                         <button
                           type="button"
                           onClick={() => { setPreviewSymbol(r.symbol); setPreviewName(name ?? '') }}
-                          className="flex items-center gap-1 text-left min-w-0"
+                          className="flex items-center gap-1 text-left min-w-0 max-md:flex-col max-md:items-start max-md:gap-0"
                         >
                           <span className="font-mono text-foreground text-xs group-hover:text-accent transition-colors duration-150">
                             {r.symbol}
@@ -1869,7 +1880,7 @@ export function Watchlist() {
                         </button>
                         <QuoteFreshnessBadge freshness={r.quote_freshness} compact />
                         {/* 删除入口：从分组移除 + 从自选移除(二次确认) + 移到顶部 */}
-                        <div className="ml-auto pl-1 shrink-0">
+                        <div className="ml-auto pl-1 shrink-0 max-md:ml-0 max-md:basis-full">
                           {confirmRemove === r.symbol ? (
                             <div className="flex items-center gap-1">
                               <button

@@ -79,7 +79,7 @@ export function StockAnalysis() {
 
   return (
     <>
-      <PageHeader
+      <PageHeader className="max-md:pl-14 max-md:gap-2"
         title="个股分析"
         subtitle="日 K · 关键价位 · AI 四维分析(技术 / 基本面 / 财务 / 消息面)"
         right={
@@ -89,10 +89,10 @@ export function StockAnalysis() {
         }
       />
 
-      <div className="w-full px-8 py-6 space-y-6">
+      <div className="w-full min-w-0 px-3 py-3 space-y-4 md:px-8 md:py-6 md:space-y-6">
         {/* 搜索栏 */}
-        <div className="flex items-center gap-3">
-          <div className="w-72">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3">
+          <div className="w-full md:w-72">
             <StockFinancialSearch onSelect={onSelect} assetTypes="stock,index" />
           </div>
           {symbol && (
@@ -100,23 +100,23 @@ export function StockAnalysis() {
               <button
                 onClick={() => setPreviewSymbol(symbol)}
                 title="查看个股日 K 详情"
-                className="group flex items-center gap-2 text-sm rounded-md px-1.5 py-0.5 -mx-1.5 hover:bg-elevated transition-colors"
+                className="group flex max-md:w-full min-w-0 items-center gap-2 text-sm rounded-md px-1.5 py-0.5 -mx-1.5 hover:bg-elevated transition-colors"
               >
-                <span className="text-foreground font-medium group-hover:text-sky-300 transition-colors">{name || symbol}</span>
+                <span className="truncate text-foreground font-medium group-hover:text-sky-300 transition-colors">{name || symbol}</span>
                 <span className="text-[10px] font-mono text-muted">{symbol}</span>
                 <ExternalLink className="h-3 w-3 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
               <button
                 onClick={handleAnalyze}
                 disabled={checking}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-btn bg-gradient-to-r from-sky-500/25 to-blue-500/15 border border-sky-400/30 text-sky-300 text-xs font-medium hover:from-sky-500/35 hover:to-blue-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex whitespace-nowrap items-center justify-center max-md:min-h-11 gap-1.5 px-3 py-1.5 rounded-btn bg-gradient-to-r from-sky-500/25 to-blue-500/15 border border-sky-400/30 text-sky-300 text-xs font-medium hover:from-sky-500/35 hover:to-blue-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {checking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 AI 个股分析
               </button>
               <button
                 onClick={() => setShowPriceAlerts(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-btn border border-sky-400/25 bg-sky-400/[0.08] text-sky-300 text-xs font-medium hover:border-sky-400/40 hover:bg-sky-400/[0.12] transition-all"
+                className="inline-flex whitespace-nowrap items-center justify-center max-md:min-h-11 gap-1.5 px-3 py-1.5 rounded-btn border border-sky-400/25 bg-sky-400/[0.08] text-sky-300 text-xs font-medium hover:border-sky-400/40 hover:bg-sky-400/[0.12] transition-all"
                 title="设置价格点位提醒"
               >
                 <Bell className="h-3.5 w-3.5" />
@@ -127,7 +127,7 @@ export function StockAnalysis() {
         </div>
 
         {/* 主体:左侧当前个股看板 + 右侧常驻历史报告 */}
-        <div className="grid grid-cols-[1fr_288px] gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_288px] gap-4 lg:gap-6 items-start">
           <div className="min-w-0">
             {!symbol ? (
               <EmptyState
@@ -225,7 +225,7 @@ function StockAnalysisBoard({ symbol }: { symbol: string }) {
   return (
     <div className="rounded-card border border-border/60 bg-surface/40 overflow-hidden">
       <div className="px-4 py-3 border-b border-border/40">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <LineChart className="h-4 w-4 text-sky-400 shrink-0" />
             <span className="text-sm font-medium text-foreground">关键价位分析</span>
@@ -260,7 +260,7 @@ function HistorySidebar() {
   const { reports, loaded } = useHistoryReports()
 
   return (
-    <aside className="self-start sticky top-0">
+    <aside className="min-w-0 self-start lg:sticky lg:top-0">
       <div className="rounded-card border border-border/60 bg-surface/40 overflow-hidden">
         <div className="px-3 py-2.5 border-b border-border/40 flex items-center gap-2">
           <HistoryIcon className="h-3.5 w-3.5 text-sky-400 shrink-0" />

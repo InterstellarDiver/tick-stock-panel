@@ -804,7 +804,7 @@ function OverviewBar({ tiers, dateValue, onDateChange, filterKeys, bf, direction
   const failedLabel = direction === 'down' ? '止跌' : '断板'
 
   return (
-    <div className="flex items-center gap-4 px-5 py-2">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2 md:px-5">
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-secondary">
         {tiers.map((t, idx) => {
           const luCount = limitUpCounts[idx]
@@ -1609,7 +1609,7 @@ export function LimitUpLadder() {
   if (isError) {
     return (
       <div className="flex flex-col h-full">
-        <PageHeader title={direction === 'down' ? '连跌梯队' : '连板梯队'} />
+        <PageHeader className="max-md:pl-14" title={direction === 'down' ? '连跌梯队' : '连板梯队'} />
         <ErrorState
           title={direction === 'down' ? '连跌数据加载失败' : '连板数据加载失败'}
           hint="行情接口暂时不可用，请重试；多次失败可检查数据源配置与网络"
@@ -1623,7 +1623,7 @@ export function LimitUpLadder() {
   if (!data || rawTiers.length === 0) {
     return (
       <div className="flex flex-col h-full">
-        <PageHeader title={direction === 'down' ? '连跌梯队' : '连板梯队'} />
+        <PageHeader className="max-md:pl-14" title={direction === 'down' ? '连跌梯队' : '连板梯队'} />
         <EmptyState icon={Flame} title={direction === 'down' ? '暂无连跌数据' : '暂无连板数据'} hint={direction === 'down' ? '该日期无跌停股或 enriched 数据未就绪' : '该日期无涨停股或 enriched 数据未就绪'} />
       </div>
     )
@@ -1632,9 +1632,10 @@ export function LimitUpLadder() {
   return (
     <div className="flex flex-col h-full">
       <PageHeader
+        className="max-md:flex-col max-md:items-stretch max-md:gap-2 max-md:px-3 max-md:[&>div:first-child]:pl-11 max-md:[&_h1]:mr-1 max-md:[&_h1]:self-center max-md:[&>div:first-child>div]:flex-wrap"
         title={direction === 'down' ? '连跌梯队' : '连板梯队'}
         titleExtra={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 whitespace-nowrap">
             <SealedBadge
               degraded={sealedDegrade.degraded}
               hasDepth={sealedDegrade.hasDepth}
@@ -1673,7 +1674,7 @@ export function LimitUpLadder() {
           </div>
         }
         right={
-          <div className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1 whitespace-nowrap max-md:[&>.w-px]:hidden">
             {/* 封单模式: 成交量/金额(仅 sealed 就绪时显示) — 胶囊式 */}
             {data?.sealed_ready && (
               <>

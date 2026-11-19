@@ -609,10 +609,11 @@ export function Data() {
     <>
       <div ref={topRef} />
       <PageHeader
+        className="max-md:flex-col max-md:items-stretch max-md:gap-2 max-md:px-3 max-md:[&>div:first-child]:pl-11"
         title="数据"
         subtitle="本地数据画像 · 同步状态 · 历史记录"
         right={
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-3 gap-1 whitespace-nowrap max-md:[&_button]:min-h-11 max-md:[&_a]:min-h-11 max-md:[&_button]:justify-center max-md:[&_a]:justify-center md:flex md:flex-wrap md:items-center md:gap-3">
             <button
               onClick={() => adjGate.guard(() => startSync.mutate())}
               disabled={isStarting}
@@ -652,8 +653,8 @@ export function Data() {
               <WandSparkles className="h-3.5 w-3.5" />
               自检/修补
             </button>
-            <div className="w-px h-4 bg-border" />
-            <div className="flex items-center gap-1.5">
+            <div className="hidden w-px h-4 bg-border md:block" />
+            <div className="contents md:flex md:items-center md:gap-1.5">
               <button
                 onClick={() => setShowCreateExt(true)}
                 className="inline-flex items-center gap-1 px-2 py-1 rounded-btn text-secondary hover:text-accent hover:bg-accent/8 text-xs transition-colors duration-150"
@@ -677,7 +678,7 @@ export function Data() {
                 <SlidersHorizontal className="h-3.5 w-3.5" />
                 页面设置
               </button>
-              <div className="w-px h-4 bg-border" />
+              <div className="hidden w-px h-4 bg-border md:block" />
               <Link
                 to="/settings?tab=data-sources&highlight=data-sources"
                 className="inline-flex items-center gap-1 px-2 py-1 rounded-btn text-secondary hover:text-accent hover:bg-accent/8 text-xs transition-colors duration-150"
@@ -699,7 +700,7 @@ export function Data() {
         }
       />
 
-      <div className="mx-auto px-8 py-6 space-y-6 max-w-6xl">
+      <div className="mx-auto max-w-6xl space-y-4 px-3 py-4 md:space-y-6 md:px-8 md:py-6">
         {/* 无 Key 提示 —— 非阻断: 历史日K走免费通道, 实时等能力取决于所选数据源 */}
         {isNoKey && (
           <div className="flex items-center gap-2 rounded-card border border-border bg-elevated/40 px-3 py-2 text-xs">
